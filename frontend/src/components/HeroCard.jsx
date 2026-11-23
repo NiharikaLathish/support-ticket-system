@@ -1,8 +1,9 @@
 import { PRIORITIES } from "../constants";
+import useCountUp from "../hooks/useCountUp";
 
-// Positions on the arc, in degrees counter-clockwise from 3 o'clock.
-const TILE_ANGLES = [196, 156, 119, 84];
-const GHOST_ANGLES = [234, 48];
+// Positions on the arc, in degrees counter-clockwise from 3 o'clock: an even
+// spread over the top of the percentage, from Low (left) to Critical (right).
+const TILE_ANGLES = [150, 110, 70, 30];
 
 function headline({ total_tickets: total, open_tickets: open, priority_breakdown }) {
   const critical = priority_breakdown.critical;
@@ -38,7 +39,9 @@ export default function HeroCard({ stats, error }) {
 function HeroContent({ stats }) {
   const { title, subtitle } = headline(stats);
   const total = stats.total_tickets;
-  const pickedUp = total ? Math.round(((total - stats.open_tickets) / total) * 100) : 0;
+  const pickedUp = useCountUp(
+    total ? Math.round(((total - stats.open_tickets) / total) * 100) : 0,
+  );
   const summary = PRIORITIES.map(
     (option) => `${option.label} ${stats.priority_breakdown[option.value]}`,
   ).join(", ");
@@ -49,11 +52,8 @@ function HeroContent({ stats }) {
       <p className="hero-subtitle">{subtitle}</p>
 
       <div className="arc" role="img" aria-label={`Tickets by priority: ${summary}`}>
-        {GHOST_ANGLES.map((angle) => (
-          <span key={angle} className="arc-tile ghost" style={{ "--angle": `${angle}deg` }} />
-        ))}
         {PRIORITIES.map((option, index) => (
-          <div key={option.value} style={{ "--angle": `${TILE_ANGLES[index]}deg` }}>
+          <div key={option.value} style={{ "--angle": `${TILE_ANGLES[index]}deg`, "--i": index }}>
             <span className={`arc-tile priority-${option.value}`}>
               {stats.priority_breakdown[option.value]}
             </span>

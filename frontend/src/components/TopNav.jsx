@@ -1,73 +1,40 @@
 import { ROUTES, hrefFor } from "../routes";
 
 const NAV_ITEMS = [
-  { route: ROUTES.dashboard, label: "Dashboard", icon: DashboardIcon },
-  { route: ROUTES.newTicket, label: "New ticket", icon: PlusIcon },
-  { route: ROUTES.tickets, label: "Tickets", icon: ListIcon },
+  { route: ROUTES.dashboard, label: "Dashboard" },
+  { route: ROUTES.tickets, label: "Tickets" },
 ];
 
 export default function TopNav({ route }) {
   return (
-    <header className="topnav">
-      <a className="brand" href={hrefFor(ROUTES.dashboard)}>
-        <span className="brand-mark" aria-hidden="true" />
-        TicketDesk
-      </a>
+    <header className="site-header">
+      <div className="topnav">
+        <a className="brand" href={hrefFor(ROUTES.dashboard)}>
+          <span className="brand-mark" aria-hidden="true" />
+          TicketDesk
+        </a>
 
-      <nav className="pill-nav" aria-label="Pages">
-        {NAV_ITEMS.map(({ route: itemRoute, label, icon: Icon }) => {
-          const isActive = route === itemRoute;
-          return (
+        <nav className="nav-links" aria-label="Pages">
+          {NAV_ITEMS.map((item) => (
             <a
-              key={itemRoute}
-              href={hrefFor(itemRoute)}
-              className={`pill${isActive ? " active" : ""}`}
-              aria-label={label}
-              aria-current={isActive ? "page" : undefined}
-              title={label}
+              key={item.route}
+              href={hrefFor(item.route)}
+              className={route === item.route ? "active" : undefined}
+              aria-current={route === item.route ? "page" : undefined}
             >
-              <Icon />
-              {isActive && <span>{label}</span>}
+              {item.label}
             </a>
-          );
-        })}
-      </nav>
+          ))}
+        </nav>
 
-      <span className="ai-chip">
-        <span className="pulse" aria-hidden="true" />
-        AI triage on
-      </span>
+        <a
+          className={`nav-button${route === ROUTES.newTicket ? " active" : ""}`}
+          href={hrefFor(ROUTES.newTicket)}
+          aria-current={route === ROUTES.newTicket ? "page" : undefined}
+        >
+          New ticket
+        </a>
+      </div>
     </header>
-  );
-}
-
-function DashboardIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="3" width="7" height="7" rx="2" />
-      <rect x="14" y="3" width="7" height="7" rx="2" />
-      <rect x="3" y="14" width="7" height="7" rx="2" />
-      <rect x="14" y="14" width="7" height="7" rx="2" />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="5" />
-      <path d="M12 8v8M8 12h8" />
-    </svg>
-  );
-}
-
-function ListIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M8 6h13M8 12h13M8 18h13" />
-      <circle cx="4" cy="6" r="1" />
-      <circle cx="4" cy="12" r="1" />
-      <circle cx="4" cy="18" r="1" />
-    </svg>
   );
 }

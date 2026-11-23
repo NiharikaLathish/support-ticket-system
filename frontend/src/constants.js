@@ -22,7 +22,7 @@ export const STATUSES = [
 
 // Chart colors, based on the Clootrack palette (warm oranges plus a blue accent).
 export const CATEGORY_COLORS = {
-  billing: "#d1571f",
+  billing: "#b9643c",
   technical: "#2ea3f2",
   account: "#7f56d9",
   general: "#b7a89c",

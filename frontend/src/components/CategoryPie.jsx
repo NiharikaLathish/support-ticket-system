@@ -15,6 +15,7 @@ export default function CategoryPie({ counts, total }) {
 
   return (
     <section className="card pie-card">
+      <p className="eyebrow">Breakdown</p>
       <h2>By category</h2>
 
       <div className="pie-body">
