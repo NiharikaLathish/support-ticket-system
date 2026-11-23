@@ -146,13 +146,16 @@ failure shows a short notice and the user picks the category and priority manual
   endpoints under `/api/tickets/`.
 
 ### Frontend
-- Components: `Sidebar`, `TopBar`, `OverviewCards`, `BreakdownChart`, `TicketForm`, and
+- Components: `TopNav`, `HeroCard`, `GlanceCard`, `CategoryBars`, `TicketForm`, and
   `TicketList` (with `TicketFilters` and `TicketItem`). All HTTP calls are in
   `src/api.js`. Stats are loaded once by the `useStats` hook in `App` and shared by
-  the overview cards and both charts.
+  the hero card, glance card and category chart.
+- **Dashboard:** the hero card's headline changes with the data (for example
+  "1 critical ticket needs you" or "Inbox zero"). The priority breakdown is drawn as
+  an arc of tiles around the share of tickets already picked up (no longer `open`).
 - **Styling:** plain CSS, with a palette and fonts (Geist, Instrument Sans) based on
   Clootrack's brand: warm dark brown, cream, orange accents and a secondary blue. The
-  donut charts use CSS `conic-gradient`, so no chart library is needed.
+  charts are built with CSS and SVG, so no chart library is needed.
 - **Suggestion UX:** the description is debounced (800 ms) before calling
   `classify`, and there is no call for very short text. A loading message is shown
   during the call. In-flight requests are cancelled with `AbortController` when the
@@ -196,7 +199,7 @@ backend/
 frontend/
   src/
     api.js           API client
-    components/      Sidebar, TopBar, OverviewCards, BreakdownChart,
+    components/      TopNav, HeroCard, GlanceCard, CategoryBars,
                      TicketForm, TicketList, TicketFilters, TicketItem
     hooks/           useDebouncedValue, useStats
   nginx.conf

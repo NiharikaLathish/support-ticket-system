@@ -49,16 +49,6 @@ export default function TicketList({ refreshKey, onTicketUpdated }) {
         <p className="hint">No tickets match the current filters.</p>
       )}
 
-      {tickets.length > 0 && (
-        <div className="ticket-table-head" aria-hidden="true">
-          <span>ID</span>
-          <span>Ticket</span>
-          <span>Category</span>
-          <span>Priority</span>
-          <span>Status</span>
-          <span>Created</span>
-        </div>
-      )}
       <ul className="ticket-list">
         {tickets.map((ticket) => (
           <TicketItem key={ticket.id} ticket={ticket} onUpdated={onTicketUpdated} />

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { classifyDescription, createTicket } from "../api";
-import { CATEGORIES, PRIORITIES } from "../constants";
+import { CATEGORIES, PRIORITIES, labelFor } from "../constants";
 import useDebouncedValue from "../hooks/useDebouncedValue";
 
 const EMPTY_FORM = { title: "", description: "", category: "", priority: "" };
@@ -125,12 +125,14 @@ export default function TicketForm({ onCreated }) {
         <FieldError messages={fieldErrors.description} />
       </label>
 
-      <ClassifyStatus status={classifyStatus} />
+      <AiPanel status={classifyStatus} suggestion={suggestion} />
 
       <div className="form-row">
         <label>
-          Category
-          <SuggestedBadge show={suggestion && form.category === suggestion.category} />
+          <span className="label-row">
+            Category
+            <SuggestedBadge show={suggestion && form.category === suggestion.category} />
+          </span>
           <select name="category" value={form.category} onChange={handleChange} required>
             <option value="">Select a category</option>
             {CATEGORIES.map((option) => (
@@ -143,8 +145,10 @@ export default function TicketForm({ onCreated }) {
         </label>
 
         <label>
-          Priority
-          <SuggestedBadge show={suggestion && form.priority === suggestion.priority} />
+          <span className="label-row">
+            Priority
+            <SuggestedBadge show={suggestion && form.priority === suggestion.priority} />
+          </span>
           <select name="priority" value={form.priority} onChange={handleChange} required>
             <option value="">Select a priority</option>
             {PRIORITIES.map((option) => (
@@ -167,29 +171,50 @@ export default function TicketForm({ onCreated }) {
   );
 }
 
-function ClassifyStatus({ status }) {
-  if (status === "loading") {
-    return <p className="classify-status loading">Analyzing description...</p>;
-  }
-  if (status === "done") {
-    return (
-      <p className="classify-status done">
-        Category and priority were suggested by AI. You can change them before submitting.
-      </p>
-    );
-  }
-  if (status === "error") {
-    return (
-      <p className="classify-status error">
-        AI suggestions are unavailable right now. Please choose a category and priority.
-      </p>
-    );
-  }
-  return null;
+function AiPanel({ status, suggestion }) {
+  return (
+    <div className={`ai-panel ${status}`} aria-live="polite">
+      <span className="ai-icon" aria-hidden="true">
+        ✦
+      </span>
+      <div className="ai-body">
+        <span className="ai-title">AI triage</span>
+        {status === "idle" && (
+          <p>Describe the issue and AI will suggest a category and priority.</p>
+        )}
+        {status === "loading" && (
+          <p>
+            Reading your description
+            <span className="dots" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </span>
+          </p>
+        )}
+        {status === "done" && suggestion && (
+          <>
+            <p>Suggested and applied below. You can change them before submitting.</p>
+            <div className="ai-chips">
+              <span className={`badge category-${suggestion.category}`}>
+                {labelFor(CATEGORIES, suggestion.category)}
+              </span>
+              <span className={`badge priority-${suggestion.priority}`}>
+                {labelFor(PRIORITIES, suggestion.priority)}
+              </span>
+            </div>
+          </>
+        )}
+        {status === "error" && (
+          <p>AI suggestions are unavailable right now. Please choose a category and priority.</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function SuggestedBadge({ show }) {
-  return show ? <span className="badge suggested">AI suggested</span> : null;
+  return show ? <span className="badge suggested">AI</span> : null;
 }
 
 function FieldError({ messages }) {

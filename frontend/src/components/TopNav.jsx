@@ -6,36 +6,41 @@ const NAV_ITEMS = [
   { href: "#tickets", label: "Tickets", icon: ListIcon },
 ];
 
-export default function Sidebar() {
+export default function TopNav() {
   const [active, setActive] = useState(NAV_ITEMS[0].href);
 
   return (
-    <aside className="sidebar">
-      <div className="brand">
+    <header className="topnav">
+      <a className="brand" href="#overview">
         <span className="brand-mark" aria-hidden="true" />
-        <span className="brand-name">TicketDesk</span>
-      </div>
+        TicketDesk
+      </a>
 
-      <p className="nav-heading">Menu</p>
-      <nav className="nav">
-        {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
-          <a
-            key={href}
-            href={href}
-            className={`nav-item${active === href ? " active" : ""}`}
-            onClick={() => setActive(href)}
-          >
-            <Icon />
-            {label}
-          </a>
-        ))}
+      <nav className="pill-nav" aria-label="Sections">
+        {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+          const isActive = active === href;
+          return (
+            <a
+              key={href}
+              href={href}
+              className={`pill${isActive ? " active" : ""}`}
+              aria-label={label}
+              aria-current={isActive ? "true" : undefined}
+              title={label}
+              onClick={() => setActive(href)}
+            >
+              <Icon />
+              {isActive && <span>{label}</span>}
+            </a>
+          );
+        })}
       </nav>
 
-      <div className="sidebar-note">
+      <span className="ai-chip">
         <span className="pulse" aria-hidden="true" />
-        AI triage powered by Gemini
-      </div>
-    </aside>
+        AI triage on
+      </span>
+    </header>
   );
 }
 

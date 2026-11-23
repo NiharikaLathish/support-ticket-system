@@ -21,13 +21,6 @@ export const STATUSES = [
 ];
 
 // Chart colors, based on the Clootrack palette (warm oranges plus a blue accent).
-export const PRIORITY_COLORS = {
-  low: "#7cc4f2",
-  medium: "#ffb27a",
-  high: "#f4854b",
-  critical: "#c8531f",
-};
-
 export const CATEGORY_COLORS = {
   billing: "#d1571f",
   technical: "#2ea3f2",
