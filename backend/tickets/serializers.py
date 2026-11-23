@@ -8,3 +8,7 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = ["id", "title", "description", "category", "priority", "status", "created_at"]
         read_only_fields = ["id", "created_at"]
+
+
+class ClassifyRequestSerializer(serializers.Serializer):
+    description = serializers.CharField()

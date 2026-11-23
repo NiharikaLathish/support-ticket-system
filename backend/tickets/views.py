@@ -1,11 +1,12 @@
 from django.db.models import Count, Min, Q
 from django.utils import timezone
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from .llm import ClassificationError, classify_ticket
 from .models import Ticket
-from .serializers import TicketSerializer
+from .serializers import ClassifyRequestSerializer, TicketSerializer
 
 
 class TicketViewSet(
@@ -15,10 +16,11 @@ class TicketViewSet(
     viewsets.GenericViewSet,
 ):
     """
-    POST   /api/tickets/        create a ticket (201)
-    GET    /api/tickets/        list tickets, newest first, with filters + search
-    PATCH  /api/tickets/<id>/   partially update a ticket
-    GET    /api/tickets/stats/  aggregated statistics
+    POST   /api/tickets/           create a ticket (201)
+    GET    /api/tickets/           list tickets, newest first, with filters + search
+    PATCH  /api/tickets/<id>/      partially update a ticket
+    GET    /api/tickets/stats/     aggregated statistics
+    POST   /api/tickets/classify/  LLM-suggested category + priority
     """
 
     queryset = Ticket.objects.all()
@@ -69,3 +71,17 @@ class TicketViewSet(
                 },
             }
         )
+
+    @action(detail=False, methods=["post"])
+    def classify(self, request):
+        serializer = ClassifyRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            suggestion = classify_ticket(serializer.validated_data["description"])
+        except ClassificationError as exc:
+            # 503 tells the client suggestions are temporarily unavailable;
+            # the frontend falls back to manual selection and submission still works.
+            return Response({"detail": str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        return Response(suggestion)
