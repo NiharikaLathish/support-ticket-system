@@ -1,33 +1,30 @@
-import { useState } from "react";
+import { ROUTES, hrefFor } from "../routes";
 
 const NAV_ITEMS = [
-  { href: "#overview", label: "Dashboard", icon: DashboardIcon },
-  { href: "#new-ticket", label: "New ticket", icon: PlusIcon },
-  { href: "#tickets", label: "Tickets", icon: ListIcon },
+  { route: ROUTES.dashboard, label: "Dashboard", icon: DashboardIcon },
+  { route: ROUTES.newTicket, label: "New ticket", icon: PlusIcon },
+  { route: ROUTES.tickets, label: "Tickets", icon: ListIcon },
 ];
 
-export default function TopNav() {
-  const [active, setActive] = useState(NAV_ITEMS[0].href);
-
+export default function TopNav({ route }) {
   return (
     <header className="topnav">
-      <a className="brand" href="#overview">
+      <a className="brand" href={hrefFor(ROUTES.dashboard)}>
         <span className="brand-mark" aria-hidden="true" />
         TicketDesk
       </a>
 
-      <nav className="pill-nav" aria-label="Sections">
-        {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-          const isActive = active === href;
+      <nav className="pill-nav" aria-label="Pages">
+        {NAV_ITEMS.map(({ route: itemRoute, label, icon: Icon }) => {
+          const isActive = route === itemRoute;
           return (
             <a
-              key={href}
-              href={href}
+              key={itemRoute}
+              href={hrefFor(itemRoute)}
               className={`pill${isActive ? " active" : ""}`}
               aria-label={label}
-              aria-current={isActive ? "true" : undefined}
+              aria-current={isActive ? "page" : undefined}
               title={label}
-              onClick={() => setActive(href)}
             >
               <Icon />
               {isActive && <span>{label}</span>}

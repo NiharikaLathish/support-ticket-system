@@ -26,7 +26,7 @@ function headline({ total_tickets: total, open_tickets: open, priority_breakdown
 
 export default function HeroCard({ stats, error }) {
   return (
-    <section id="overview" className="card hero">
+    <section className="card hero">
       <p className="eyebrow">Overview</p>
       {error && <p className="error">{error}</p>}
       {!stats && !error && <p className="hint">Loading stats...</p>}

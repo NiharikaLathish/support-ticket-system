@@ -146,6 +146,14 @@ failure shows a short notice and the user picks the category and priority manual
   endpoints under `/api/tickets/`.
 
 ### Frontend
+- **Pages:** Dashboard (stats, the new-ticket form and the 5 most recent tickets),
+  Tickets (the full queue with search and filters, 10 at a time with "Show more") and
+  New ticket (the form on its own). This keeps the dashboard short however long the
+  queue gets. Pages use hash routes (`#/`, `#/tickets`, `#/new`) handled by a small
+  `useHashRoute` hook, so no router library or nginx changes are needed.
+- The API returns all matching tickets, as the spec asks, and the list pages through
+  them in the browser. For a much larger queue, the next step would be server-side
+  pagination with DRF's `PageNumberPagination`.
 - Components: `TopNav`, `HeroCard`, `GlanceCard`, `CategoryPie`, `TicketForm`, and
   `TicketList` (with `TicketFilters` and `TicketItem`). All HTTP calls are in
   `src/api.js`. Stats are loaded once by the `useStats` hook in `App` and shared by
@@ -199,9 +207,11 @@ backend/
 frontend/
   src/
     api.js           API client
+    routes.js        Page routes
+    pages/           DashboardPage, TicketsPage, NewTicketPage
     components/      TopNav, HeroCard, GlanceCard, CategoryPie,
                      TicketForm, TicketList, TicketFilters, TicketItem
-    hooks/           useDebouncedValue, useStats
+    hooks/           useDebouncedValue, useStats, useHashRoute
   nginx.conf
 docker-compose.yml
 ```
