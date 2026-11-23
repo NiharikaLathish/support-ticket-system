@@ -146,7 +146,7 @@ failure shows a short notice and the user picks the category and priority manual
   endpoints under `/api/tickets/`.
 
 ### Frontend
-- Components: `TopNav`, `HeroCard`, `GlanceCard`, `CategoryBars`, `TicketForm`, and
+- Components: `TopNav`, `HeroCard`, `GlanceCard`, `CategoryPie`, `TicketForm`, and
   `TicketList` (with `TicketFilters` and `TicketItem`). All HTTP calls are in
   `src/api.js`. Stats are loaded once by the `useStats` hook in `App` and shared by
   the hero card, glance card and category chart.
@@ -199,7 +199,7 @@ backend/
 frontend/
   src/
     api.js           API client
-    components/      TopNav, HeroCard, GlanceCard, CategoryBars,
+    components/      TopNav, HeroCard, GlanceCard, CategoryPie,
                      TicketForm, TicketList, TicketFilters, TicketItem
     hooks/           useDebouncedValue, useStats
   nginx.conf

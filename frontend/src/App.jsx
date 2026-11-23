@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import CategoryBars from "./components/CategoryBars";
+import CategoryPie from "./components/CategoryPie";
 import GlanceCard from "./components/GlanceCard";
 import HeroCard from "./components/HeroCard";
 import TicketForm from "./components/TicketForm";
@@ -24,7 +24,7 @@ export default function App() {
           {stats && (
             <>
               <GlanceCard stats={stats} />
-              <CategoryBars counts={stats.category_breakdown} total={stats.total_tickets} />
+              <CategoryPie counts={stats.category_breakdown} total={stats.total_tickets} />
             </>
           )}
         </div>
