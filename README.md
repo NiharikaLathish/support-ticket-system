@@ -40,6 +40,27 @@ Migrations run automatically when the backend starts.
 | `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model used for classification. |
 | `DJANGO_SECRET_KEY` | dev-only value | Set a real value outside local development. |
 
+## Running tests
+
+The backend has 44 automated tests in `backend/tickets/tests/`. With the app running:
+
+```bash
+docker-compose exec backend python manage.py test tickets
+```
+
+Django creates and removes a separate test database, so existing tickets are not
+affected. The LLM is mocked, so tests need no API key or network access. They cover:
+
+- **Models:** PostgreSQL rejects invalid choices and empty text, even on bulk
+  `update()`, and the `status` default works for raw SQL inserts.
+- **API:** status codes, validation, newest-first ordering, every filter, search,
+  combined filters, `PATCH`, and `PUT` being disallowed.
+- **Stats:** counts, zero-filled breakdowns, the average-per-day formula, and that the
+  endpoint runs exactly **one** database query.
+- **Classify:** a successful suggestion, plus timeouts, connection and HTTP errors,
+  non-JSON output, unexpected labels and a missing API key, which all return `503`.
+  Ticket creation still works when the LLM is down.
+
 ## API
 
 | Method | Endpoint | Description |
