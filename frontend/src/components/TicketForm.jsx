@@ -12,7 +12,8 @@ const CLASSIFY_DELAY_MS = 800;
 export default function TicketForm({ onCreated }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [suggestion, setSuggestion] = useState(null);
-  const [classifyStatus, setClassifyStatus] = useState("idle"); // idle | loading | done | error
+  // idle | short | loading | done | error
+  const [classifyStatus, setClassifyStatus] = useState("idle");
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -24,7 +25,7 @@ export default function TicketForm({ onCreated }) {
 
   useEffect(() => {
     if (debouncedDescription.length < MIN_CLASSIFY_LENGTH) {
-      setClassifyStatus("idle");
+      setClassifyStatus(debouncedDescription.length === 0 ? "idle" : "short");
       return undefined;
     }
 
@@ -181,6 +182,9 @@ function AiPanel({ status, suggestion }) {
         <span className="ai-title">AI triage</span>
         {status === "idle" && (
           <p>Describe the issue and AI will suggest a category and priority.</p>
+        )}
+        {status === "short" && (
+          <p>Keep typing. A few more details will help AI suggest a category and priority.</p>
         )}
         {status === "loading" && (
           <p>
