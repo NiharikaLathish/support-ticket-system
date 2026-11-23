@@ -149,6 +149,13 @@ failure shows a short notice and the user picks the category and priority manual
 - Secrets come from environment variables (`.env`, which is git-ignored), never
   from code.
 
+## Use of AI tools
+
+I used an AI coding assistant (Claude) while building this project, to help write
+and review code. I worked through it step by step: I reviewed each change, ran and
+tested the app (API calls, the browser UI, and a fresh `docker-compose up --build`),
+and made each commit myself.
+
 ## Project structure
 
 ```
