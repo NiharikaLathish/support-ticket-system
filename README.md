@@ -153,9 +153,9 @@ failure shows a short notice and the user picks the category and priority manual
 - **Dashboard:** the hero card's headline changes with the data (for example
   "1 critical ticket needs you" or "Inbox zero"). The priority breakdown is drawn as
   an arc of tiles around the share of tickets already picked up (no longer `open`).
-- **Styling:** plain CSS, with a palette and fonts (Geist, Instrument Sans) based on
-  Clootrack's brand: warm dark brown, cream, orange accents and a secondary blue. The
-  charts are built with CSS and SVG, so no chart library is needed.
+- **Styling:** plain CSS with a palette based on Clootrack's brand (warm dark brown,
+  cream, orange accents and a secondary blue), IBM Plex Sans, and small corner radii.
+  The charts are built with CSS and SVG, so no chart library is needed.
 - **Suggestion UX:** the description is debounced (800 ms) before calling
   `classify`, and there is no call for very short text. A loading message is shown
   during the call. In-flight requests are cancelled with `AbortController` when the
