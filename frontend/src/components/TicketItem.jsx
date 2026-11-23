@@ -2,7 +2,7 @@ import { useState } from "react";
 import { updateTicket } from "../api";
 import { CATEGORIES, PRIORITIES, STATUSES, labelFor } from "../constants";
 
-const PREVIEW_LENGTH = 140;
+const PREVIEW_LENGTH = 90;
 
 function truncate(text, maxLength) {
   return text.length > maxLength ? `${text.slice(0, maxLength).trimEnd()}...` : text;
@@ -27,43 +27,45 @@ export default function TicketItem({ ticket, onUpdated }) {
   }
 
   return (
-    <li className={`ticket priority-${ticket.priority}`}>
+    <li className={`ticket${expanded ? " expanded" : ""}`}>
       <button
         type="button"
-        className="ticket-header"
+        className="ticket-row"
         onClick={() => setExpanded((value) => !value)}
         aria-expanded={expanded}
       >
-        <span className="ticket-title">{ticket.title}</span>
-        <time dateTime={ticket.created_at}>{new Date(ticket.created_at).toLocaleString()}</time>
-      </button>
-
-      <p className="ticket-description">
-        {expanded ? ticket.description : truncate(ticket.description, PREVIEW_LENGTH)}
-      </p>
-
-      <div className="ticket-meta">
-        <span className="badge">{labelFor(CATEGORIES, ticket.category)}</span>
+        <span className="ticket-id">#{ticket.id}</span>
+        <span className="ticket-main">
+          <span className="ticket-title">{ticket.title}</span>
+          <span className="ticket-preview">{truncate(ticket.description, PREVIEW_LENGTH)}</span>
+        </span>
+        <span className={`badge category-${ticket.category}`}>
+          {labelFor(CATEGORIES, ticket.category)}
+        </span>
         <span className={`badge priority-${ticket.priority}`}>
           {labelFor(PRIORITIES, ticket.priority)}
         </span>
         <span className={`badge status-${ticket.status}`}>{labelFor(STATUSES, ticket.status)}</span>
-      </div>
+        <time dateTime={ticket.created_at}>{new Date(ticket.created_at).toLocaleString()}</time>
+      </button>
 
       {expanded && (
-        <div className="ticket-actions">
-          <label>
-            Change status
-            <select value={ticket.status} onChange={handleStatusChange} disabled={saving}>
-              {STATUSES.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          {saving && <span className="hint">Saving...</span>}
-          {error && <span className="error">{error}</span>}
+        <div className="ticket-details">
+          <p className="ticket-description">{ticket.description}</p>
+          <div className="ticket-actions">
+            <label>
+              Change status
+              <select value={ticket.status} onChange={handleStatusChange} disabled={saving}>
+                {STATUSES.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {saving && <span className="hint">Saving...</span>}
+            {error && <span className="error">{error}</span>}
+          </div>
         </div>
       )}
     </li>

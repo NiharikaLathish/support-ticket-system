@@ -20,6 +20,21 @@ export const STATUSES = [
   { value: "closed", label: "Closed" },
 ];
 
+// Chart colors, based on the Clootrack palette (warm oranges plus a blue accent).
+export const PRIORITY_COLORS = {
+  low: "#7cc4f2",
+  medium: "#ffb27a",
+  high: "#f4854b",
+  critical: "#c8531f",
+};
+
+export const CATEGORY_COLORS = {
+  billing: "#d1571f",
+  technical: "#2ea3f2",
+  account: "#7f56d9",
+  general: "#b7a89c",
+};
+
 export function labelFor(options, value) {
   return options.find((option) => option.value === value)?.label ?? value;
 }
